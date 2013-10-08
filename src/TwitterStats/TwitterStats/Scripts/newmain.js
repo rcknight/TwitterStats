@@ -48,7 +48,7 @@ $(document).ready(function () {
               data: dailyCompetitorData,
               xkey: "date",
               ykeys: ["competitors"],
-              labels: ["Other Entrants"],
+              labels: ["Competitors"],
               barRatio: 0.4,
               xLabelAngle: 35,
               hideHover: "auto",
