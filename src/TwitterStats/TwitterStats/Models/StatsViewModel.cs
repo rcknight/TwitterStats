@@ -135,15 +135,22 @@ namespace TwitterStats.Models
                     if (sinceId != 0)
                         statusTweets = statusTweets.Where(t => t.SinceID == sinceId);
 
-                    var returned = statusTweets.ToList();
-                    
-                    if (!returned.Any())
-                        break;
+                    if (statusTweets != null)
+                    {
+                        var returned = statusTweets.ToList();
 
-                    lastCount = returned.Count();
-                    oldestId = returned.Min(t => ulong.Parse(t.StatusID));
-                    returned.RemoveAt(returned.Count - 1);
-                    allTweets.AddRange(returned);
+                        if (!returned.Any())
+                            break;
+
+                        lastCount = returned.Count();
+                        oldestId = returned.Min(t => ulong.Parse(t.StatusID));
+                        returned.RemoveAt(returned.Count - 1);
+                        allTweets.AddRange(returned);
+                    }
+                    else
+                    {
+                        lastCount = 0;
+                    }
                 }
             }
 
