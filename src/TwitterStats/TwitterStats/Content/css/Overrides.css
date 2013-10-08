@@ -1,0 +1,51 @@
+﻿        .number {
+            color: rgb(102,102,102) !important;
+            font-weight: 300 !important;
+        }
+        .text {
+            color: rgb(102,102,102) !important;
+            font-weight: 300 !important;
+            font-size: 18px;
+        }
+        h1 {
+            font-size: 59px;
+        }
+        .icon-twitter {
+            text-align: left;
+            font-size: 59px !important;
+        }
+        .twittertile {
+            background-color: #00ACED;
+            color: white !important;
+        }
+        .twittertile .number {
+            font-weight: 300 !important;
+            color: white !important;
+        }
+        .twittertile .text {
+            color: white !important;
+            font-size: 18px;
+        }
+
+        .stats-container {
+            margin-bottom: 0px;
+            margin-top: 0;
+        }
+
+        body {
+            padding-top: 30px;
+        }
+
+        .nomargin {
+            margin-top:0;
+            margin-bottom:0 !important;
+            padding-top:0;
+            padding-bottom: 0;
+            border-bottom-width: 1px;
+            border-bottom-style: solid;
+            border-bottom-color: rgb(230, 230, 230);
+        }
+
+        @media (max-width: 979px) {
+            .stats-container { height: 350px !important; }
+        }
