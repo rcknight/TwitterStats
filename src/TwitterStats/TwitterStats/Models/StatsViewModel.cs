@@ -89,7 +89,7 @@ namespace TwitterStats.Models
                 var competitors = retweets.Sum(rt => rt.RetweetedStatus.RetweetCount) / retweets.Count();
 
                 DailyTweets.Add(new { date=day.Key, tweets=tweets.Count(), retweets=retweets.Count() });
-                DailyCompetitors.Add(new { date = day.Key, competitors });
+                DailyCompetitors.Add(new { date = day.Key, competitors, label = day.Key });
             }
         }
 
