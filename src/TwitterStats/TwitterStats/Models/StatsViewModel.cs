@@ -41,24 +41,34 @@ namespace TwitterStats.Models
             };
             Update();
         }
-        
+
+        private object UpdateLock = new Object();
+
         public void Update()
         {
-            //load tweets
-            UpdateTweets();
-            //user stuff
-            var user = GetUserDetails(UserName);
-            Following = user.FriendsCount;
-            Followers = user.FollowersCount;
-            TweetsAllTime = user.StatusesCount;
+            lock (UpdateLock)
+            {
+                //load tweets
+                UpdateTweets();
+                //user stuff
+                var user = GetUserDetails(UserName);
+                Following = user.FriendsCount;
+                Followers = user.FollowersCount;
+                TweetsAllTime = user.StatusesCount;
 
-            //Tweet based stuff
-            TweetsToday = AllTweets.Count(t => t.CreatedAt.ToUniversalTime() > DateTime.Today.ToUniversalTime());
-            var retweets = AllTweets.Where(t => t.CreatedAt.ToUniversalTime() < DateTime.Today.ToUniversalTime().AddDays(-1) && t.RetweetedStatus != null && t.RetweetedStatus.StatusID != null && t.RetweetedStatus.RetweetCount > 0).ToList();
-            ExpectedWins =
-                retweets.Sum(tweet => (decimal) 1/(decimal)tweet.RetweetedStatus.RetweetCount);
+                //Tweet based stuff
+                TweetsToday = AllTweets.Count(t => t.CreatedAt.ToUniversalTime() > DateTime.Today.ToUniversalTime());
+                var retweets =
+                    AllTweets.Where(
+                        t =>
+                        t.CreatedAt.ToUniversalTime() < DateTime.Today.ToUniversalTime().AddDays(-1) &&
+                        t.RetweetedStatus != null && t.RetweetedStatus.StatusID != null &&
+                        t.RetweetedStatus.RetweetCount > 0).ToList();
+                ExpectedWins =
+                    retweets.Sum(tweet => (decimal) 1/(decimal) tweet.RetweetedStatus.RetweetCount);
 
-            UpdateDailyCounts();
+                UpdateDailyCounts();
+            }
         }
 
         private void UpdateDailyCounts()
