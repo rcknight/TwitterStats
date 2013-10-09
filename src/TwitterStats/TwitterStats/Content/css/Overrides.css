@@ -48,11 +48,8 @@
 
         @media (max-width: 979px) {
             .stats-container { height: 370px !important; }
-            .twittertile {
-                font-size: 42px !important;
-            }
             .icon-twitter {
-                font-size: 42px !important;
+                display: none !important;
             }
         }
         
