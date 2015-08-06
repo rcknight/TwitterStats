@@ -164,7 +164,7 @@ namespace TwitterStats.Models
                 }
             }
 
-            return allTweets.Distinct().ToList();
+            return allTweets.Distinct().Where(t => t.CreatedAt > new DateTime(2015,01,01)).ToList();
         }
 
     }
