@@ -21,9 +21,12 @@ namespace TwitterStats.Models
         public List<Object> DailyCompetitors { get; private set; } 
         private ITwitterAuthorizer Auth { get; set; }
 
-        public StatsViewModel(string userName)
+        private static String[] Users = new[]
+         { "RichardK1986", "Compasauraus", "Mr_Richio", "RKCompetitions", "CompWinner86"};
+
+        public StatsViewModel()
         {
-            UserName = userName;
+            UserName = String.Format("{0} Users", Users.Count());
             AllTweets = new List<Status>();
             Auth = new SingleUserAuthorizer()
             {
@@ -51,6 +54,11 @@ namespace TwitterStats.Models
                 //load tweets
                 UpdateTweets();
                 //user stuff
+                var allDetails = Users.Select(GetUserDetails).ToList();
+                Following = allDetails.Sum(d => d.FriendsCount);
+                Followers = allDetails.Sum(d => d.FollowersCount);
+                TweetsAllTime = allDetails.Sum(d => d.StatusesCount);
+
                 var user = GetUserDetails(UserName);
                 Following = user.FriendsCount;
                 Followers = user.FollowersCount;
@@ -128,43 +136,46 @@ namespace TwitterStats.Models
 
             using (var twitter = new TwitterContext(Auth))
             {
-                int lastCount = 199;
-                var oldestId = ulong.MaxValue;
-                while (lastCount > 1)
+                foreach (var u in Users)
                 {
-                    IQueryable<Status> statusTweets =
-                        twitter.Status.Where(tweet => tweet.Type == StatusType.User
-                                                      && tweet.ScreenName == UserName
-                                                      && tweet.IncludeMyRetweet == true
-                                                      && tweet.ExcludeReplies == false
-                                                      && tweet.Count == 199);
-
-                    if (oldestId != ulong.MaxValue)
-                        statusTweets = statusTweets.Where(t => t.MaxID == oldestId);
-
-                    if (sinceId != 0)
-                        statusTweets = statusTweets.Where(t => t.SinceID == sinceId);
-
-                    if (statusTweets != null)
+                    int lastCount = 199;
+                    var oldestId = ulong.MaxValue;
+                    while (lastCount > 1)
                     {
-                        var returned = statusTweets.ToList();
+                        IQueryable<Status> statusTweets =
+                            twitter.Status.Where(tweet => tweet.Type == StatusType.User
+                                                          && tweet.ScreenName == u
+                                                          && tweet.IncludeMyRetweet == true
+                                                          && tweet.ExcludeReplies == false
+                                                          && tweet.Count == 199);
 
-                        if (!returned.Any())
-                            break;
+                        if (oldestId != ulong.MaxValue)
+                            statusTweets = statusTweets.Where(t => t.MaxID == oldestId);
 
-                        lastCount = returned.Count();
-                        oldestId = returned.Min(t => ulong.Parse(t.StatusID));
-                        returned.RemoveAt(returned.Count - 1);
-                        allTweets.AddRange(returned);
-                    }
-                    else
-                    {
-                        lastCount = 0;
+                        if (sinceId != 0)
+                            statusTweets = statusTweets.Where(t => t.SinceID == sinceId);
+
+                        if (statusTweets != null)
+                        {
+                            var returned = statusTweets.ToList();
+
+                            if (!returned.Any())
+                                break;
+
+                            lastCount = returned.Count();
+                            oldestId = returned.Min(t => ulong.Parse(t.StatusID));
+                            returned.RemoveAt(returned.Count - 1);
+                            allTweets.AddRange(returned);
+                        }
+                        else
+                        {
+                            lastCount = 0;
+                        }
                     }
                 }
             }
 
-            return allTweets.Distinct().Where(t => t.CreatedAt > new DateTime(2015,01,01)).ToList();
+            return allTweets.Distinct().Where(t => t.CreatedAt > new DateTime(2015,01,01)).OrderByDescending(s =>s.StatusID).ToList();
         }
 
     }

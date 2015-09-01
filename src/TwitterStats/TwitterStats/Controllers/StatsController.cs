@@ -16,7 +16,7 @@ namespace TwitterStats.Controllers
         {
             if (MvcApplication.Stats == null)
             {
-                MvcApplication.Stats = new StatsViewModel(ConfigurationManager.AppSettings["TWITTER_USER"]);
+                MvcApplication.Stats = new StatsViewModel();
             }
             else
             {
@@ -30,7 +30,7 @@ namespace TwitterStats.Controllers
         {
             if (MvcApplication.Stats == null)
             {
-                MvcApplication.Stats = new StatsViewModel(ConfigurationManager.AppSettings["TWITTER_USER"]);
+                MvcApplication.Stats = new StatsViewModel();
             }
             else
             {
@@ -44,7 +44,7 @@ namespace TwitterStats.Controllers
         {
             if (MvcApplication.Stats == null)
             {
-                MvcApplication.Stats = new StatsViewModel(ConfigurationManager.AppSettings["TWITTER_USER"]);
+                MvcApplication.Stats = new StatsViewModel();
             }
             else
             {
