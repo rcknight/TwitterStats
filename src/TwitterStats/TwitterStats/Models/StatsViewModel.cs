@@ -59,11 +59,6 @@ namespace TwitterStats.Models
                 Followers = allDetails.Sum(d => d.FollowersCount);
                 TweetsAllTime = allDetails.Sum(d => d.StatusesCount);
 
-                var user = GetUserDetails(UserName);
-                Following = user.FriendsCount;
-                Followers = user.FollowersCount;
-                TweetsAllTime = user.StatusesCount;
-
                 //Tweet based stuff
                 TweetsToday = AllTweets.Count(t => t.CreatedAt.ToUniversalTime() > DateTime.Today.ToUniversalTime());
                 var retweets =
