@@ -22,7 +22,7 @@ namespace TwitterStats.Models
         private ITwitterAuthorizer Auth { get; set; }
 
         private static String[] Users = new[]
-         { "RichardK1986", "Compasauraus", "Mr_Richio", "RKCompetitions", "CompWinner86"};
+         { "RichardK1986", "Compasauraus", "Mr_Richio", "RKCompetitions", "CompWinner86", "CompoRick"};
 
         public StatsViewModel()
         {
@@ -83,9 +83,6 @@ namespace TwitterStats.Models
 
             foreach (var day in days)
             {
-                if (day == days.Last())
-                    break;
-
                 var tweets = day.Where(t => t.RetweetedStatus == null || t.RetweetedStatus.StatusID == null).ToList();
                 var retweets = day.Where(t => t.RetweetedStatus != null && t.RetweetedStatus.StatusID != null).ToList();
 
@@ -133,6 +130,7 @@ namespace TwitterStats.Models
             {
                 foreach (var u in Users)
                 {
+                    ulong localSince = sinceId;
                     int lastCount = 199;
                     var oldestId = ulong.MaxValue;
                     while (lastCount > 1)
@@ -144,11 +142,11 @@ namespace TwitterStats.Models
                                                           && tweet.ExcludeReplies == false
                                                           && tweet.Count == 199);
 
-                        if (oldestId != ulong.MaxValue)
+                        if (oldestId != ulong.MaxValue && sinceId == 0)
                             statusTweets = statusTweets.Where(t => t.MaxID == oldestId);
 
                         if (sinceId != 0)
-                            statusTweets = statusTweets.Where(t => t.SinceID == sinceId);
+                            statusTweets = statusTweets.Where(t => t.SinceID == localSince);
 
                         if (statusTweets != null)
                         {
@@ -158,6 +156,7 @@ namespace TwitterStats.Models
                                 break;
 
                             lastCount = returned.Count();
+                            localSince = returned.Max(t => ulong.Parse(t.StatusID));
                             oldestId = returned.Min(t => ulong.Parse(t.StatusID));
                             returned.RemoveAt(returned.Count - 1);
                             allTweets.AddRange(returned);
