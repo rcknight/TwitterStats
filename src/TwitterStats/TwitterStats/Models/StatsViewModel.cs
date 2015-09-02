@@ -169,7 +169,7 @@ namespace TwitterStats.Models
                 }
             }
 
-            return allTweets.Distinct().Where(t => t.CreatedAt > new DateTime(2015,01,01)).OrderByDescending(s =>s.StatusID).ToList();
+            return allTweets.Where(t => t.CreatedAt > new DateTime(2015,01,01)).OrderByDescending(s =>s.StatusID).ToList();
         }
 
     }
