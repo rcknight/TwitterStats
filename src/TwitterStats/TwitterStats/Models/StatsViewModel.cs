@@ -22,7 +22,7 @@ namespace TwitterStats.Models
         private ITwitterAuthorizer Auth { get; set; }
 
         private static String[] Users = new[]
-         { "RichardK1986", "Compasauraus", "Mr_Richio", "RKCompetitions", "CompWinner86", "CompoRick"};
+         { "RichardK1986", "_RichK86_", "Mr_Richio", "_Rich_K_", "_RK_86_", "Rick_K_86"};
 
         public StatsViewModel()
         {
